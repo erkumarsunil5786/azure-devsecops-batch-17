@@ -22,7 +22,7 @@ jobs:
 
       - name: Copy files
         run: |
-          rsync -av --delete temp-repo/ . --exclude .git --exclude .github --exclude CodeSamples/Terraform/media-steaming-infra/media-streaming
+          rsync -av --delete temp-repo/ . --exclude .git --exclude .github || true
 
       - name: Commit and push changes
         run: |
