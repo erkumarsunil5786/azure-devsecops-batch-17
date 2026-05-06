@@ -1,0 +1,33 @@
+name: Sync B17_DevOpsInsider Code Repository
+
+on:
+  schedule:
+    - cron: "30 18 * * *"   # Daily 12 AM IST #IST = UTC+5:30
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout your repo
+        uses: actions/checkout@v4
+
+      - name: Clone external repo
+        run: |
+          git clone https://github.com/devopsinsiders/azure-devsecops-batch-17.git temp-repo
+
+      - name: Copy files
+        run: |
+          rsync -av --delete temp-repo/ . --exclude .git --exclude .github
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "erkumarsunil5786"
+          git config user.email "erkumarsunil5786@users.noreply.github.com"
+          git add .
+          git commit -m "Auto-sync repo" || echo "No changes to commit"
+          git push
